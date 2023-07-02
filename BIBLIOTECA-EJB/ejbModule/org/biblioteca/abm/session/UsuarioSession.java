@@ -6,49 +6,53 @@ import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 
-import org.biblioteca.entidad.Cliente;
 import org.biblioteca.entidad.Usuario;
-
 
 @Stateless
 @LocalBean
 public class UsuarioSession {
 
-	@PersistenceContext
-	EntityManager em;
+    @PersistenceContext
+    EntityManager em;
 
     public UsuarioSession() {
-        // TODO Auto-generated constructor stub
+        // Constructor por defecto
     }
 
     public List<Usuario> buscarTodos() throws Exception {
-		String jpql = "SELECT o FROM Usuario o ORDER BY o.codigo";
-		List<Usuario> usuario = (List<Usuario>) em.createQuery(jpql, Usuario.class).getResultList();
-		return usuario;
-	}
+        String jpql = "SELECT o FROM Usuario o ORDER BY o.codigo";
+        TypedQuery<Usuario> query = em.createQuery(jpql, Usuario.class);
+        return query.getResultList();
+    }
 
-	public Usuario buscarPorCodigo(Integer codigo) throws Exception {
-		return em.find(Usuario.class, codigo);
-	}
+    public Usuario buscarPorCodigo(Integer codigo) throws Exception {
+        return em.find(Usuario.class, codigo);
+    }
 
-	public Usuario actualizar(Usuario usuarioAct) throws Exception {
-		Usuario usuario = buscarPorCodigo(usuarioAct.getCodigo()); //Busca el objeto
-		if (usuario == null) { // Si no encuentra usuario valdrá null
-			usuarioAct.setCodigo(null); // para que la bd auto-genere el ID
-			em.persist(usuarioAct);
-			em.refresh(usuarioAct);
-		} else {
-			usuarioAct = em.merge(usuarioAct);
-		}
-		return usuarioAct;
-	}
+    public Usuario actualizar(Usuario usuario) throws Exception {
+        Usuario usuarioActualizado = em.merge(usuario);
+        return usuarioActualizado;
+    }
 
-	public void eliminar(Integer codigo) throws Exception {
-		Usuario usu = buscarPorCodigo(codigo); // Busca el objeto usuario
-		if (usu != null) {
-			em.remove(usu);
-		}
-	}
+    public void eliminar(Integer codigo) throws Exception {
+        Usuario usuario = buscarPorCodigo(codigo);
+        if (usuario != null) {
+            em.remove(usuario);
+        }
+    }
+
+    public Usuario buscarPorUsernameAndPassword(String username, String password) throws Exception {
+        String jpql = "SELECT u FROM Usuario u WHERE u.username = :username AND u.password = :password";
+        TypedQuery<Usuario> query = em.createQuery(jpql, Usuario.class);
+        query.setParameter("username", username);
+        query.setParameter("password", password);
+        List<Usuario> resultList = query.getResultList();
+        if (!resultList.isEmpty()) {
+            return resultList.get(0);
+        } else {
+            return null;
+        }
+    }
 }
-
