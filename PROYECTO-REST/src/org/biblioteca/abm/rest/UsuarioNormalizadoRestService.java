@@ -67,6 +67,30 @@ public class UsuarioNormalizadoRestService {
 
     @POST
     @Produces(MediaType.APPLICATION_JSON)
+    @Path("/restablecer")
+    public Map<String, Object> Restablecer(Usuario usuario) {
+
+        Map<String, Object> retorno = new HashMap<>();
+
+        try {
+            Usuario usuarioEncontrado = usuarioSession.buscarPorCorreo(usuario.getUsername(),usuario.getPregunta(),usuario.getRespuesta(), usuario.getPassword());
+            if (usuarioEncontrado != null) {
+                retorno.put("success", true);
+                retorno.put("message", "cambio de credenciales exitoso");
+                retorno.put("usuario", usuarioEncontrado);
+            } else {
+                retorno.put("success", false);
+                retorno.put("message", "Credenciales incorrectas");
+            }
+        } catch (Exception e) {
+            retorno.put("success", false);
+            retorno.put("error", e.getMessage());
+        }
+
+        return retorno;
+    }
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("/login")
     public Map<String, Object> login(Usuario usuario) {

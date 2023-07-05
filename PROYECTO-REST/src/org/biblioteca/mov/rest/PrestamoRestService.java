@@ -8,6 +8,7 @@ import java.util.Map;
 import javax.ejb.EJB;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -74,6 +75,15 @@ public class PrestamoRestService {
 		return cs.actualizar(prestamo, prestamoLibroList);
 	}
 
+	
+	@POST
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/registar")
+	public void guardar( Prestamo prestamo, List<PrestamoLibro> prestamoLibroList) throws Exception {
+	    cs.registrar(prestamo, prestamoLibroList);
+	}
+
+	
 //DELETE http://localhost:8080/PROYECTO-REST/rest/prestamo/delete/n
 	@DELETE
 	@Produces(MediaType.APPLICATION_JSON)

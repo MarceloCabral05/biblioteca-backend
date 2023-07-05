@@ -20,6 +20,11 @@ public class Usuario implements Serializable {
 	private String username;
 	@Column(name = "usu_password")
 	private String password;
+	@Column(name = "usu_pregunta")
+	private String pregunta;
+
+	@Column(name = "usu_respuesta")
+	private String respuesta;
 
 	public Usuario() {
 	}
@@ -34,6 +39,19 @@ public class Usuario implements Serializable {
 
 	public String getUsername() {
 		return username;
+	}
+
+	public void setPregunta(String pregunta) {
+		this.pregunta = pregunta;
+	}
+	public String getPregunta() {
+		return pregunta;
+	}
+	public void setRespuesta(String respuesta) {
+		this.respuesta = respuesta;
+	}
+	public String getRespuesta() {
+		return respuesta;
 	}
 
 	public void setUsername(String username) {

@@ -25,6 +25,7 @@ public class Libro implements Serializable {
 	@Column(name = "lib_obs")
 	private String obs;
 
+
 	@ManyToOne
 	@JoinColumn(name = "lib_tipo")
 	private LibrosTipos tipos;

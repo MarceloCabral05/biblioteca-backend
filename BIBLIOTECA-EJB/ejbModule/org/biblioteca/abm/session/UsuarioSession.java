@@ -55,4 +55,38 @@ public class UsuarioSession {
             return null;
         }
     }
+    public Usuario buscarPorCorreo(String username, String pregunta,String respuesta,String password ) throws Exception {
+       
+    	TypedQuery<Usuario> query = em.createQuery("SELECT u FROM Usuario u WHERE u.username = :username AND u.pregunta = :pregunta AND u.respuesta = :respuesta"
+    			, Usuario.class);
+    	query.setParameter("username", username);
+    	query.setParameter("pregunta", pregunta);
+    	query.setParameter("respuesta", respuesta);
+    	query.setMaxResults(1);
+    	Usuario usuario=null;
+    	try {
+    		usuario = query.getSingleResult();
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+    	 
+
+    	if (usuario != null) {
+    	    // Actualizar el password
+    	    usuario.setPassword(password);
+    	    Usuario usua  =em.merge(usuario);
+    	    
+    	    if (usua!=null)
+    	    	return usua;
+    	    else
+    	    	return null;
+    	    
+    	}
+    	  else
+  	    	return null;
+    	
+    	
+    
+    }
 }
